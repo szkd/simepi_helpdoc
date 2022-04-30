@@ -8,7 +8,8 @@
     margin:0;
   }
   .wrapper {
-    width: 800px;
+    max-width: 800px;
+    min-width: 400px;
   }
   nav {
     box-sizing: border-box;
@@ -26,7 +27,7 @@
     float: left;
     box-sizing: border-box;
     height: 100vh;
-    width: 600px;
+    width: calc(100% - 200px);
     overflow: scroll;
     padding: 0 50px 20px 30px;
   }
@@ -97,11 +98,13 @@
     }
     this.classList.add("focused");
   }
+
   window.onload = () => {
     const menuItems = document.getElementsByClassName("menu-item");
     for(let item of menuItems) {
       item.addEventListener("click", selectMenuItem);
     }
+
     const cbs = document.getElementsByClassName("menu-head-cb");
     for (let cb of cbs) {
       cb.addEventListener("input", ()=>{
@@ -113,6 +116,7 @@
         contents[0].style.height = cb.checked ? height + "px": "0px";
       });
       cb.checked = false;
+      cb.click();
     }
   };
 </script>
@@ -121,47 +125,54 @@
 
   <nav>
     <section class="menu">
-      <input type="checkbox" class="menu-head-cb" id="mh2">
-      <label for="mh2" class="menu-head">
+      <div class="menu-item">
+        <a href="#intro" class="menu-link">
+          はじめに
+        </a>
+      </div>
+    </section>
+    <section class="menu">
+      <input type="checkbox" class="menu-head-cb" id="mh1">
+      <label for="mh1" class="menu-head">
         シミュレーションを開始する
       </label>
       <div class="menu-content">
         <div class="menu-item">
-          <a href="#c11" class="menu-link">
-            シミュレーション世界を作成・保存する
+          <a href="#sim" class="menu-link">
+            概要
           </a>
         </div>
         <div class="menu-item">
-          <a href="#c12" class="menu-link">
-            ウィンドウを表示する
+          <a href="#sim1" class="menu-link">
+            シミュレーション・ウィンドウを作成/保存する
           </a>
         </div>
         <div class="menu-item">
-          <a href="#c13" class="menu-link">
-            ウィンドウをタブで開く
+          <a href="#sim2" class="menu-link">
+            シミュレーション・ウィンドウをタブで開く
+          </a>
+        </div>
+        <div class="menu-item">
+          <a href="#sim3" class="menu-link">
+            感染者を追加する
           </a>
         </div>
       </div>
     </section>
     <section class="menu">
-      <input type="checkbox" class="menu-head-cb" id="mh3">
-      <label for="mh3" class="menu-head">
-        アニメーションの表示を変更する
+      <input type="checkbox" class="menu-head-cb" id="mh2">
+      <label for="mh2" class="menu-head">
+        シミュレーション結果を確認する
       </label>
       <div class="menu-content">
         <div class="menu-item">
-          <a href="#c31" class="menu-link">
-            item
+          <a href="#result" class="menu-link">
+            概要
           </a>
         </div>
         <div class="menu-item">
-          <a href="#c32" class="menu-link">
-            item
-          </a>
-        </div>
-        <div class="menu-item">
-          <a href="#c33" class="menu-link">
-            item
+          <a href="#result1" class="menu-link">
+            アニメーションの表示を変更する
           </a>
         </div>
       </div>
@@ -213,29 +224,6 @@
       </div>
     </section>
     <section class="menu">
-      <input type="checkbox" class="menu-head-cb" id="mh6">
-      <label for="mh6" class="menu-head">
-        シミュレーション結果を確認する
-      </label>
-      <div class="menu-content">
-        <div class="menu-item">
-          <a href="#c61" class="menu-link">
-            item
-          </a>
-        </div>
-        <div class="menu-item">
-          <a href="#c62" class="menu-link">
-            item
-          </a>
-        </div>
-        <div class="menu-item">
-          <a href="#c63" class="menu-link">
-            item
-          </a>
-        </div>
-      </div>
-    </section>
-    <section class="menu">
       <input type="checkbox" class="menu-head-cb" id="mh7">
       <label for="mh7" class="menu-head">
         パラメータの詳細を理解する
@@ -270,6 +258,7 @@
     </section>
   </nav>
   <div class="contents">
+    <span id="intro"></span>
     <h1>模擬感染ヘルプ</h1>
     <section class="content">
       <p>
@@ -299,39 +288,241 @@
         </p>
     <span class="note">このヘルプは模擬感染version 1.9.2(3)を元に作成されました．</span>
 
-    </section>
+  </section>
+  <span id="sim"></span>
   <h2>
-        シミュレーションを開始する
+    シミュレーションを開始する
   </h2>
   <section class="content">
-    <div class="img">
-    <img class="main_img" src="img/main_window.png" alt="">
+    <h2 class="sect-title">
+      概要
+    </h2>
+    <div class="description">
+      <p>模擬感染では，ひとつのシミュレーション・ウィンドウでひとつのシミュレーションを管理します．
+        シミュレーション・ウィンドウの上側は管理パネルになっており，
+        シミュレーションを実行したり，シナリオやパラメータを設定したり，
+        実行中のシミュレーションの状態を確認したりすることができます．
+      </p>
+      <p>
+        ウィンドウの下側は，シミュレーション結果をアニメーションで表示するフィールドです．
+        ひとつの動き回る点がひとりの人間を模しており，
+        発症して隔離されるとフィールド内右上の「病院」領域へ，
+        死亡すると右下の「墓地」領域へ移動します．
+      </p>
+      <p>
+        シミュレーションを実行するには，管理パネルの「開始」ボタンをクリックします．
+        一度開始すると「開始」ボタンは「停止」ボタンに変化し，
+        「停止」ボタンをクリックするとシミュレーションを一時停止することができます．
+        シミュレーションを開始したとき，
+        管理パネル左下の「...日で停止」がチェックされていると，
+        指定された日数までシミュレーションを実行し自動的に停止します．
+        また，「ステップ」ボタンをクリックして，シミュレーションを１ステップずつ実行することも可能です．
+      </p>
+      <p>
+        「初期化」ボタンをクリックすると，「シナリオ」と「パラメータ」が適用され，
+        アニメーション・フィールドの個体の位置と状態が初期値に戻ります．
+        ただし，「パラメータ」の「世界」分類以外のパラメータについては，
+        シミュレーション実行中に変更を適用することができます．
+      </p>
+      <div class="img">
+        <img class="main_img" src="img/main_window.png" alt="">
+      </div>
     </div>
   </section>
   <section class="content">
-    <h2 class="sect-title" id="c11">
-            シミュレーション世界を作成・保存する
+    <span id="sim1"></span>
+    <h2 class="sect-title">
+      シミュレーション・ウィンドウを作成/保存する
     </h2>
     <div class="description">
+      <p>
+      シミュレーション・ウィンドウを新規作成するには
+      メニューバーの「ファイル」から「新規」を選択します．
+      シミュレーション・ウィンドウはいくつでも作成できます．
+      タブ形式で表示している場合は，タブバーの「+」から
+      新規作成することも可能です．
+    </p>
+    <p>
+      シミュレーション・ウィンドウを上書き保存するにはメニューバーの「ファイル」から
+      「保存」，ファイル名を指定して保存するには「別名で保存」を選択します．
+      シミュレーション・ウィンドウを保存すると，「.sEpi」ファイルが作成されます．
+      「.sEpi」ファイルを開くには「ファイル」から「開く...」を選択してください．
+      「.sEpi」を開く，もしくは「ファイル」メニューの「保存した状態に戻す」を選択すると，
+      最後に保存した時点のシナリオ，パラメータの設定が適用されます．
+      なお，シナリオ，パラメータの設定は個別に保存することもできます．
+    </p>
     </div>
   </section>
   <section class="content">
-    <h2 class="sect-title" id="c12">
-            ウィンドウを表示する
+    <span id="sim2"></span>
+    <h2 class="sect-title">
+        シミュレーション・ウィンドウをタブで開く
     </h2>
     <div class="description">
+      <p>
+      メニューバーの「ウィンドウ」メニューから「タブバーを表示」を選択すると，
+      シミュレーション・ウィンドウをタブ形式で表示することができます．
+      ウィンドウ上部に現在そのウィンドウが表示しているタブの名称，
+      その下にタブグループが表示されます．
+      タブグループの右端の「＋」ボタンでタブを追加することができます．
+    </p>
+    <p>
+      タブを画面の空いているところにドラッグ＆ドロップすると，
+      ウィンドウとして独立させることができます．
+    別ウィンドウのタブをタブグループに移動するには，
+    タブを統合したいタブグループにドラッグ＆ドロップします．
+      また，全てのウィンドウを一つのウィンドウにまとめてタブ表示するには，
+      「ウィンドウ」メニューから，「全てのウィンドウを結合」を選択します．
+    </p>
+      <div class="img">
+        <img class="main_img" src="img/tab.png" alt="">
+      </div>
     </div>
   </section>
   <section class="content">
-    <h2 class="sect-title" id="c13">
-            ウィンドウをタブで開く
+    <span id="sim3"></span>
+    <h2 class="sect-title">
+      感染者を追加する
     </h2>
     <div class="description">
+      <p>
+        シミュレーション・ウィンドウの「感染者を追加...」ボタンから，
+        シミュレーション実行中に未感染者の中に感染を起こすことができます．
+        「感染者を追加...」ボタンをクリックすると，感染者追加ダイアログが開きます．
+      </p>
+      <div class="img">
+        <img class="main_img" src="img/add_infected.png" alt="">
+      </div>
     </div>
+    <p>
+      「変異株」では，
+      「パラメータ」パネルの「検査とワクチン」の
+      「変異株とワクチン...」から登録した変異株のリストから，
+      どのウイルス変異株の感染者を増やすのか選択します．
+    </p>
+    <p>
+      「配置場所」では，アニメーション・フィールドの左側の領域の
+      どのあたりに感染者を追加するか選択することができます．
+      「ランダムに分散」を選択すると，
+      領域の色々な場所にバラバラに感染者が現れます．
+      「中央クラスタ」を選択すると，中央にまとまって感染者が現れます．
+      「任意位置クラスタ」を選択すると，領域のどこかにまとまって感染者が現れます．
+    </p>
+    <p>
+      「追加」ボタンをクリックすると，「配置場所」で選択した位置の「追加数」で指定した人数の未感染者が
+      「変異株」で選択したウイルスに感染します．
+    </p>
   </section>
+  <span id="result"></span>
   <h2>
+    シミュレーション結果を確認する
+  </h2>
+  <section class="content">
+    <h2 class="sect-title">
+      概要
+    </h2>
+    <div class="description">
+      <p>
+        シミュレーションの実行結果は，
+        シミュレーション・ウィンドウ，パラメータ・ウィンドウ，統計ウィンドウ，
+        表データ・ウィンドウで
+        リアルタイムに確認することができます．
+      </p>
+      <p>
+        シミュレーション・ウィンドウでは，個体の状態ごとの現在数，
+        病院に隔離されている個体の現在数，
+        一秒あたり何ステップ計算しているかを示す計算速度，
+        シミュレーション中の経過日数，
+        適用中のシナリオのどの部分を実行しているかを示すシナリオ番号
+        を確認することができます．
+        また，アニメーション・フィールドでは，
+        人間を模した点が状態によって色を変えながら動き回り
+        シミュレーションの結果を視覚化します．
+      </p>
+      <p>
+        パラメータ・ウィンドウは，シミュレーション・ウィンドウの
+        「パラメータ...」ボタンをクリックすると開きます．
+        このウィンドウでは，「初期化」を行った時のパラメータの初期値，
+        シミュレーション中の変化を反映した現在値を確認できます．
+      </p>
+      <p>
+        統計ウィンドウは，シミュレーション・ウィンドウの
+        「統計...」ボタンをクリックすると開きます．
+        このウィンドウでは，さまざまな統計情報のグラフを確認できます．
+      </p>
+    </div>
+  </section>
+  <section class="content">
+    <span id="result1"></span>
+    <h2 class="sect-title">
         アニメーションの表示を変更する
-  </h2>
+    </h2>
+    <div class="description">
+      <p>
+        シミュレーション・ウィンドウの「開始」「初期化」ボタンの右側のリストから
+        アニメーション・フィールドの個体の色が示す情報を変更することができます．
+        <dl class="">
+        <dt>
+          個体の状態
+        </dt>
+        <dd>
+          個体の色によって，
+          未感染，無症状感染，有症状感染，ワクチン接種済み，感染後回復，死亡
+          のどの状態であるかを示します．
+          未感染者は
+          <span style="color:blue;">青</span>,
+          無症状者は
+          <span style="color:yellow;">黄色</span>,
+          有症状者は
+          <span style="color:red;">赤</span>,
+          ワクチン接種者は白，
+          回復者は
+          <span style="color:green;">緑</span>,
+          死者は
+          <span style="color:gray;">灰色</span>
+          になります．
+        </dd>
+        <dt>
+          年齢
+        </dt>
+        <dd>
+          個体の年齢によって色が変わります．
+        </dd>
+        <dt>
+          ワクチン態度
+        </dt>
+        <dd>
+          ワクチン接種に賛成か反対かによって色が変わります．
+        </dd>
+        <dt>
+          ワクチンとウイルス
+        </dt>
+        <dd>
+          未感染者でワクチンも未接種の場合，青色になります．
+          ワクチンの種類，感染した変異株によって色が変わります．
+        </dd>
+        </dl>
+      </p>
+      <p>
+        また，「集会を表示」にチェックを入れると，集会を行っている場所が円形で強調表示されます．
+        人が集まりやすい集会ほど大きな円で表示されます．
+      </p>
+      <p>
+        ひとつひとつの個体をよく見たい場合は，シミュレーション・ウィンドウの右端にある
+        拡大鏡の+ボタンで拡大できます．
+        拡大しているときは，アニメーション・フィールドをドラッグして表示領域を変更することができます．
+        元に戻すには，拡大鏡の-ボタンで縮小します．
+      </p>
+      <p>
+        アニメーションのフレームを描画する頻度を調節することも可能です．
+        拡大鏡ボタンの左の「毎ステップ描画する」もしくは「◯ステップ毎に描画する」の隣にある
+        上下の矢印をクリックして描画する頻度を変更します．
+        計算速度が遅い場合は，描画するまでのステップ数を大きくすると
+        改善することがあります．
+      </p>
+    </div>
+  </section>
+
   <h2>
         パラメータを調整する
   </h2>
@@ -358,9 +549,6 @@
   </section>
   <h2>
       シナリオを設定する
-  </h2>
-  <h2>
-        シミュレーション結果を確認する
   </h2>
   <h2>
         パラメータの詳細を理解する
